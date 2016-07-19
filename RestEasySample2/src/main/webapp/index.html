@@ -1,0 +1,53 @@
+<html>
+<head>
+    <script   src="https://code.jquery.com/jquery-3.0.0.js" crossorigin="anonymous"></script>
+    <script language="javascript">
+
+        $(document).ready(function() {
+            function toString(xmlData){
+            if (window.ActiveXObject){//IE
+               return xmlData.xml;
+              }else{//Chrome
+               return (new XMLSerializer()).serializeToString(xmlData);
+              }
+            }
+
+            $('#echoIfXmlConsumed').click(function() {
+                var query = $('#query')[0];
+                query = query.value;
+                console.log(query);
+
+                var contentType = $('#content_type')[0].value;
+                console.log(contentType);
+                $.ajax({
+                  type: 'POST',
+                  url: '/RestEasySample2-1.0-SNAPSHOT/services/restful/echoIfXml/',
+                  crossDomain : true,
+                  data: query,
+                  contentType : contentType,
+                  success: function(value){
+                    $('#result').text(toString(value));
+                  },
+                  error:function(value){
+                     $('#result').text(value.statusText);
+                  }
+
+                });
+            });
+
+        });
+    </script>
+</head>
+<body>
+    <textarea id="query" rows="20" cols="100">&lt;foo&gt;&lt;/foo&gt;</textarea>
+
+    <select id="content_type">
+        <option value="application/xml">application/xml</option>
+        <option value="application/text">application/text</option>
+    </select>
+    <button id="echoIfXmlConsumed">echoIfXmlConsumed</button>
+
+    <textarea id="result" rows="20" cols="100"></textarea>
+
+</body>
+</html>

@@ -1,0 +1,53 @@
+<html>
+<head>
+    <script   src="https://code.jquery.com/jquery-3.0.0.js" crossorigin="anonymous"></script>
+    <script language="javascript">
+
+        $(document).ready(function() {
+            function toString(xmlData){
+            if (window.ActiveXObject){//IE
+               return xmlData.xml;
+              }else{//Chrome
+               return (new XMLSerializer()).serializeToString(xmlData);
+              }
+            }
+
+            $('#send').click(function() {
+                var query = $('#query')[0];
+                query = query.value;
+                console.log(query);
+
+                $.ajax({
+                  type: 'POST',
+                  url: '/RestEasySample3-1.0-SNAPSHOT/services/restful/jaxb/injextxml/',
+                  crossDomain : true,
+                  data: query,
+                  contentType : "application/xml",
+                  success: function(value){
+                    $('#result').text(value);
+                  },
+                  error:function(value){
+                     $('#result').text(value.statusText);
+                  }
+
+                });
+            });
+
+        });
+    </script>
+</head>
+<body>
+    <textarea id="query" rows="20" cols="100">
+&lt;sampleXml&gt;
+  &lt;elem1&gt;var1&lt;/elem1&gt;
+  &lt;elem2&gt;var2&lt;/elem2&gt;
+  &lt;elem3&gt;var3&lt;/elem3&gt;
+&lt;/sampleXml&gt;
+    </textarea>
+
+    <button id="send">send</button>
+
+    <textarea id="result" rows="20" cols="100"></textarea>
+
+</body>
+</html>
